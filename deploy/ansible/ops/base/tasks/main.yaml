@@ -1,0 +1,101 @@
+
+---
+# Set SQLPATH to HOME
+- name: Cat bashrc
+  ansible.builtin.command: cat $HOME/.bashrc
+  become_user: opc
+  register: bashrc_content
+- name: Set SQLPATH to HOME
+  ansible.builtin.shell: echo "export SQLPATH=$HOME" >> $HOME/.bashrc
+  become_user: opc
+  when: bashrc_content.stdout.find('SQLPATH') == -1
+- name: Install JDK 23 headless
+  ansible.builtin.package:
+    name: jdk-23-headless
+    update_cache: yes
+- name: Install sqlcl
+  ansible.builtin.package:
+    name: sqlcl
+    update_cache: yes
+- name: Copy login.sql file
+  ansible.builtin.copy:
+    src: ../files/login.sql
+    dest: /home/opc/login.sql
+    owner: opc
+    group: opc
+    mode: '0640'
+- name: Copy highlight.json file
+  ansible.builtin.copy:
+    src: ../files/highlight.json
+    dest: /home/opc/highlight.json
+    owner: opc
+    group: opc
+    mode: '0640'
+- name: Create conn directory
+  ansible.builtin.file:
+    path: /home/opc/conn
+    state: directory
+    owner: opc
+    group: opc
+    mode: '0744'
+- name: Copy conn/admin.sql template
+  ansible.builtin.template:
+    src: ../files/conn/admin.sql.j2
+    dest: /home/opc/conn/admin.sql
+    owner: opc
+    group: opc
+    mode: '0640'
+- name: Copy conn SQL files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /home/opc/conn/
+    owner: opc
+    group: opc
+    mode: '0740'
+  with_fileglob:
+    - ../files/conn/*.sql
+- name: Create init directory
+  ansible.builtin.file:
+    path: /home/opc/init
+    state: directory
+    owner: opc
+    group: opc
+    mode: '0744'
+- name: Copy init SQL files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /home/opc/init/
+    owner: opc
+    group: opc
+    mode: '0740'
+  with_fileglob:
+    - ../files/init/*.sql
+- name: Create queries directory
+  ansible.builtin.file:
+    path: /home/opc/queries
+    state: directory
+    owner: opc
+    group: opc
+    mode: '0744'
+- name: Copy queries SQL files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /home/opc/queries/
+    owner: opc
+    group: opc
+    mode: '0640'
+  with_fileglob:
+    - ../files/queries/*.sql
+- name: Create ADMIN connection
+  ansible.builtin.command: "sql /nolog @/home/opc/conn/admin.sql"
+  become_user: opc
+- name: Run banner
+  ansible.builtin.command: "sql -name admin @/home/opc/queries/banner.sql"
+  become_user: opc
+  register: banner_result
+- debug: msg="{{ banner_result.stdout_lines }}"
+- name: Run sysdate
+  ansible.builtin.command: "sql -name admin @/home/opc/queries/sysdate.sql"
+  become_user: opc
+  register: sysdate_result
+- debug: msg="{{ sysdate_result.stdout_lines }}"

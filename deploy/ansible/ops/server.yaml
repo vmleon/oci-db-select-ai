@@ -1,0 +1,7 @@
+- name: Ops
+  hosts: ops
+  become: true
+  roles:
+    - base
+  environment:
+    SQLPATH: "$HOME"

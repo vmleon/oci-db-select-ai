@@ -1,0 +1,57 @@
+#!/bin/bash
+
+touch /home/opc/bootstrap.lock
+
+# Update and upgrade repo
+dnf update -y
+dnf upgrade -y
+dnf install ansible -y
+
+# Get ansible_backend
+curl "${ansible_backend_par_full_path}" -o /home/opc/ansible_backend.zip
+mkdir -p /home/opc/ansible_backend
+unzip /home/opc/ansible_backend.zip -d /home/opc/ansible_backend && \
+    rm /home/opc/ansible_backend.zip
+chown -R opc:opc /home/opc/ansible_backend
+
+# Get backend_jar
+curl "${backend_jar_par_full_path}" -o /home/opc/backend_jar.zip
+mkdir -p /home/opc/backend
+unzip /home/opc/backend_jar.zip -d /home/opc/backend && \
+    rm /home/opc/backend_jar.zip
+chown -R opc:opc /home/opc/backend
+cp -r /home/opc/backend/* /home/opc/ansible_backend/java/files/
+
+cat <<EOT >> /home/opc/ansible_params.json
+{
+  "project_name": "${project_name}",
+  "db_service_name": "${db_service_name}",
+  "db_admin_password": "${db_admin_password}",
+  "region_name": "${region_name}",
+  "backend_dest_directory": "/home/opc/backend",
+  "backend_jar_file": "backend-0.0.1.jar"
+}
+EOT
+chown opc:opc /home/opc/ansible_params.json
+
+cat <<EOT >> /home/opc/backend.ini
+[backend]
+localhost ansible_connection=local ansible_user=root
+
+[backend:vars]
+ansible_python_interpreter="/usr/bin/python3"
+EOT
+chown opc:opc /home/opc/backend.ini
+
+touch /home/opc/ansible-playbook.log
+chown opc:opc /home/opc/ansible-playbook.log
+
+ANSIBLE_PYTHON_INTERPRETER="/usr/bin/python3" \
+    ansible-galaxy collection install ansible.posix | tee -a /home/opc/ansible-playbook.log
+
+ANSIBLE_PYTHON_INTERPRETER="/usr/bin/python3" ansible-playbook \
+    -i /home/opc/backend.ini \
+    --extra-vars "@/home/opc/ansible_params.json" \
+    /home/opc/ansible_backend/server.yaml | tee -a /home/opc/ansible-playbook.log
+
+rm /home/opc/bootstrap.lock

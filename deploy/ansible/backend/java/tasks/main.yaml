@@ -1,0 +1,53 @@
+---
+- name: Install JDK 23
+  ansible.builtin.package:
+    name: jdk-23
+    update_cache: yes
+- name: Create Backend config directory
+  ansible.builtin.file:
+    path: "{{backend_dest_directory}}/config"
+    state: directory
+    owner: opc
+    group: opc
+    mode: '0744'
+- name: Copy jar file
+  ansible.builtin.copy:
+    src: "files/{{backend_jar_file}}"
+    dest: "{{backend_dest_directory}}/{{backend_jar_file}}"
+    owner: opc
+    group: opc
+    mode: '0640'
+- name: Copy application.yaml file
+  ansible.builtin.template:
+    src: files/application.yaml.j2
+    dest: "{{backend_dest_directory}}/config/application.yaml"
+    owner: opc
+    group: opc
+    mode: '0640'
+- name: Copy backend service file
+  ansible.builtin.template:
+    src: files/backend.service.j2
+    dest: /etc/systemd/system/backend.service
+    mode: '0644'
+- name: Copy run script file
+  ansible.builtin.template:
+    src: files/run.sh.j2
+    dest: "{{backend_dest_directory}}/run.sh"
+    owner: opc
+    group: opc
+    mode: '0744'
+- name: Reload Systemd Daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+- name: Start backend service
+  ansible.builtin.systemd:
+    name: backend
+    state: started
+- name: Enable backend service
+  ansible.builtin.systemd:
+    name: backend
+    enabled: yes
+- name: Stop firewalld
+  ansible.builtin.command: systemctl stop firewalld
+- name: Disable firewalld
+  ansible.builtin.command: systemctl disable firewalld

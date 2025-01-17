@@ -1,0 +1,14 @@
+{
+    "highlights": [
+        {
+            "type": "regex",
+            "test": "^[0-9]+$",
+            "color": "RED"
+        },
+        {
+            "type": "regex",
+            "test": "^[^0-9]+$",
+            "color": "GREEN"
+        }
+    ]
+}

@@ -1,5 +1,7 @@
 # OCI DB Select AI
 
+> This content is a Work In Progress
+
 This project show you how to work with Oracle Database Select AI. You can use a single database to host your schema and create metadata for Select AI or, like in this project, have 2 databases one with the schema for your production data and a second database for Select AI and any Database AI capability.
 
 You will have a fully functional deployment to battle-test your knowledge with hands-on experience, and make adjustments on the code to fit your needs.
@@ -71,5 +73,49 @@ Run the commands that `tfvars.mjs` output in yellow one by one.
 Come back to the root folder:
 
 ```bash
-cd ../..
+cd ../../..
+```
+
+## SSH into the machines
+
+Create the bastion host session
+
+```bash
+zx scripts/bastion-session.mjs
+```
+
+Paste the yellow command to connect with SSH into the compute instance.
+
+To connect, answer `yes` to add the fingerprint to the know hosts.
+
+When in the `ops` machine, you can also connect to the `backend` machine with this command
+
+```bash
+ssh -i /home/opc/private.key opc@$(jq -r .backend_private_ip ansible_params.json)
+```
+
+## Clean up
+
+Go to the folder `deploy/tf/app`.
+
+```bash
+cd deploy/tf/app
+```
+
+Run the Terraform destroy:
+
+```bash
+terraform destroy -auto-approve
+```
+
+Come back to the root compartment:
+
+```bash
+cd ../../..
+```
+
+Clean all auxiliary files:
+
+```bash
+zx scripts/clean.mjs
 ```
