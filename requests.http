@@ -1,0 +1,16 @@
+###
+
+POST http://localhost:8080/api/search?q=List the xxx with creation date before Sep 2022
+
+###
+
+POST http://localhost:8080/api/search?q=List the xxx with creation date before Sep 2022
+Content-Type: application/json
+
+{
+    "n": 2
+}
+
+###
+
+GET http://localhost:8080/api/selectai/profiles

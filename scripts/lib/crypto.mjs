@@ -43,6 +43,7 @@ export async function createRSAKeyPair(outputPath = ".") {
     console.log(`RSA Private Key written to: ${chalk.yellow(privateKeyPath)}`);
     await $`openssl rsa -in ${privateKeyPath} -outform PEM -pubout -out ${publicKeyPath}`;
     console.log(`RSA Public Key written to: ${chalk.yellow(publicKeyPath)}`);
+    return { privateKeyPath, publicKeyPath };
   } catch (error) {
     exitWithError(error.stderr);
   }

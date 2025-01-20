@@ -32,9 +32,18 @@ chmod 400 /home/opc/private.key
 cat <<EOT >> /home/opc/ansible_params.json
 {
   "project_name": "${project_name}",
+  "tenancy_ocid": "${tenancy_ocid}",
+  "user_ocid": "${user_ocid}",
+  "fingerprint": "${fingerprint}",
+  "private_api_key_content": "${private_api_key_content}",
   "db_service_name": "${db_service_name}",
   "db_admin_password": "${db_admin_password}",
   "backend_private_ip": "${backend_private_ip}",
+
+  "oci_genai_runtime_name": "${oci_genai_runtime_name}",
+  "oci_genai_model_name": "${oci_genai_model_name}",
+  "oci_genai_compartment_id": "${oci_genai_compartment_id}",
+
   "region_name": "${region_name}"
 }
 EOT

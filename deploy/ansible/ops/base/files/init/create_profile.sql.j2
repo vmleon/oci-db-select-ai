@@ -1,0 +1,25 @@
+begin
+
+   dbms_cloud_ai.drop_profile('GENAI', TRUE);
+
+   dbms_cloud_ai.create_profile(
+      profile_name => 'GENAI',
+      attributes   => '{
+         "provider": "oci",                                                                   
+         "credential_name": "GENAI_CRED",                                     
+         "object_list": [
+                        {"owner": "SH", "name": "customers"},                
+                        {"owner": "SH", "name": "countries"},                
+                        {"owner": "SH", "name": "supplementary_demographics"},
+                        {"owner": "SH", "name": "profits"},                  
+                        {"owner": "SH", "name": "promotions"},               
+                        {"owner": "SH", "name": "products"}],
+         "region": "{{region_name}}",
+         "oci_compartment_id": "{{oci_genai_compartment_id}}",
+         "oci_apiformat": "GENERIC"
+       }'
+   );
+end;
+/
+
+exit;

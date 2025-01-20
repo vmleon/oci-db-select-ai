@@ -13,6 +13,7 @@ const config = new Configstore(projectName, { projectName });
 
 const filesToDelete = [
   "./.certs",
+  "./.api",
   "deploy/tf/modules/ops/generated",
   "deploy/tf/modules/adbs/generated",
   "deploy/tf/app/generated",

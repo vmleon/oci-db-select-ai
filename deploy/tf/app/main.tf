@@ -43,6 +43,14 @@ module "ops" {
   tenancy_ocid        = var.tenancy_ocid
   compartment_ocid    = var.compartment_ocid
 
+  user_ocid                = oci_identity_user.genai_user.id
+  private_api_key_content  = var.private_api_key_content
+  fingerprint              = oci_identity_api_key.api_key.fingerprint
+
+  oci_genai_runtime_name = "LLAMA" // COHERE
+  oci_genai_model_name = "cohere.command-r-08-2024" // Not used
+  oci_genai_compartment_id = var.compartment_ocid
+
   subnet_id            = oci_core_subnet.app_subnet.id
   instance_shape       = var.instance_shape
   backend_private_ip   = module.backend.private_ip

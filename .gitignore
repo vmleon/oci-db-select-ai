@@ -3,7 +3,8 @@
 .crt
 .csr
 .pem
-.certs
+.certs/
+.api/
 generated/
 .env.json
 *.zip

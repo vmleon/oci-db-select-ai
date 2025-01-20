@@ -8,6 +8,15 @@ You will have a fully functional deployment to battle-test your knowledge with h
 
 Happy hacking!
 
+## Documentation
+
+- [Select AI Use Cases](https://docs.public.content.oci.oraclecloud.com/en-us/iaas/autonomous-database-serverless/doc/select-ai-use-cases.html)
+- [Use Select AI for Natural Language Interaction with your Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html)
+- [Examples of Using Select AI](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/select-ai-examples.html)
+- [DBMS_CLOUD_AI Package](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/dbms-cloud-ai-package.html)
+- [DBMS_CLOUD_AI Package - Profile Attributes](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/dbms-cloud-ai-package.html#GUID-12D91681-B51C-48E0-93FD-9ABC67B0F375)
+- [Getting Access to Generative AI](https://docs.oracle.com/en-us/iaas/Content/generative-ai/iam-policies.htm)
+
 ## Requirements
 
 - Node.js (LTS version preferred, tested on v22.13)
@@ -88,10 +97,50 @@ Paste the yellow command to connect with SSH into the compute instance.
 
 To connect, answer `yes` to add the fingerprint to the know hosts.
 
-When in the `ops` machine, you can also connect to the `backend` machine with this command
+> Connecting to the Backend machine:
+>
+> When in the `ops` machine, you can also connect to the `backend` machine with this command
+>
+> ```bash
+> ssh -i /home/opc/private.key opc@$(jq -r .backend_private_ip ansible_params.json)
+> ```
+
+## Run Select AI queries
+
+Run a normal query against the `SH` schema containing Sales information.
 
 ```bash
-ssh -i /home/opc/private.key opc@$(jq -r .backend_private_ip ansible_params.json)
+sql -name admin -s @/home/opc/queries/sh_query.sql
+```
+
+Run a natural query language to count the number of customers, the result will be SQL code that can be executed.
+
+```bash
+sql -name admin -s @/home/opc/queries/nql_count_customers.sql
+```
+
+> Execute the result as admin:
+>
+> ```bash
+> sql -name admin
+> ```
+>
+> From SQLcl console, run the query you got above. For example:
+>
+> ```sql
+> SELECT count(*) FROM SH.CUSTOMERS;
+> ```
+>
+> To exit, type:
+>
+> ```sql
+> exit;
+> ```
+>
+> Run another natural query language to list the customers that buying shoes, the result will be SQL code that can be executed.
+
+```bash
+sql -name admin -s @/home/opc/queries/nql_customers_buying_shoes.sql
 ```
 
 ## Clean up

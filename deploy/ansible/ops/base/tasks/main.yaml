@@ -51,7 +51,7 @@
     dest: /home/opc/conn/
     owner: opc
     group: opc
-    mode: '0740'
+    mode: '0640'
   with_fileglob:
     - ../files/conn/*.sql
 - name: Create init directory
@@ -61,13 +61,27 @@
     owner: opc
     group: opc
     mode: '0744'
+- name: Copy init/create_credentials.sql.sql template
+  ansible.builtin.template:
+    src: ../files/init/create_credentials.sql.j2
+    dest: /home/opc/init/create_credentials.sql
+    owner: opc
+    group: opc
+    mode: '0640'
+- name: Copy init/create_profile.sql.sql template
+  ansible.builtin.template:
+    src: ../files/init/create_profile.sql.j2
+    dest: /home/opc/init/create_profile.sql
+    owner: opc
+    group: opc
+    mode: '0640'
 - name: Copy init SQL files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /home/opc/init/
     owner: opc
     group: opc
-    mode: '0740'
+    mode: '0640'
   with_fileglob:
     - ../files/init/*.sql
 - name: Create queries directory
@@ -99,3 +113,20 @@
   become_user: opc
   register: sysdate_result
 - debug: msg="{{ sysdate_result.stdout_lines }}"
+- name: Grant Permissions
+  ansible.builtin.command: "sql -name admin @/home/opc/init/grant_permissions.sql"
+  become_user: opc
+# - name: Add Network ACL
+#   ansible.builtin.command: "sql -name admin @/home/opc/init/network_acl.sql"
+#   become_user: opc
+- name: Add Credentials
+  ansible.builtin.command: "sql -name admin @/home/opc/init/create_credentials.sql"
+  become_user: opc
+- name: List credentials
+  ansible.builtin.command: "sql -name admin @/home/opc/queries/list_credentials.sql"
+  become_user: opc
+  register: list_credentials_results
+- debug: msg="{{ list_credentials_results.stdout_lines }}"
+- name: Create profile
+  ansible.builtin.command: "sql -name admin @/home/opc/init/create_profile.sql"
+  become_user: opc

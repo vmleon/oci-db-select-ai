@@ -2,12 +2,22 @@ locals {
   cloud_init_content = templatefile("${path.module}/userdata/bootstrap.tftpl", {
     project_name         = var.project_name
     region_name          = var.region
+
+    tenancy_ocid             = var.tenancy_ocid
+    user_ocid                = var.user_ocid
+    fingerprint              = var.fingerprint
+    private_api_key_content  = var.private_api_key_content
+    
     backend_private_ip   = var.backend_private_ip
     private_key_content  = file(var.ssh_private_key_path)
     
     db_service_name            = "${var.project_name}${var.deploy_id}"
     db_admin_password          = var.db_admin_password
     db_wallet_par_full_path    = var.db_wallet_par_full_path
+
+    oci_genai_runtime_name    = var.oci_genai_runtime_name
+    oci_genai_model_name      = var.oci_genai_model_name
+    oci_genai_compartment_id  = var.oci_genai_compartment_id
     
     ansible_ops_par_full_path  = var.ansible_ops_artifact_par_full_path
   })

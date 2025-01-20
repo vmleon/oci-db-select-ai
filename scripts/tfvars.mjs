@@ -23,6 +23,8 @@ async function generateTFVars() {
   const certPrivateKey = config.get("certPrivateKey");
   const publicKeyContent = config.get("publicKeyContent");
   const sshPrivateKeyPath = config.get("privateKeyPath");
+  const publicAPIKeyPath = config.get("publicAPIKeyPath");
+  const privateAPIKeyContent = config.get("privateAPIKeyContent");
   const instanceShape = config.get("instanceShape");
 
   const tfFolder = path.join("deploy", "tf", "app");
@@ -38,6 +40,8 @@ async function generateTFVars() {
     cert_private_key: certPrivateKey,
     ssh_public_key: publicKeyContent,
     ssh_private_key_path: sshPrivateKeyPath,
+    private_api_key_content: privateAPIKeyContent,
+    public_api_key_path: publicAPIKeyPath,
     config_file_profile: profile,
     project_name: projectName,
     instance_shape: instanceShape,

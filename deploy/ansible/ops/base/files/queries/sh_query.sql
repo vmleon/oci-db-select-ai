@@ -26,3 +26,5 @@ select channel_desc,
                                       '2000-10' )
    and country_iso_code = 'US'
  group by channel_desc;
+
+exit;

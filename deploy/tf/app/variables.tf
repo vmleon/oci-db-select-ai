@@ -43,3 +43,11 @@ variable "cert_fullchain" {
 variable "cert_private_key" {
   type = string
 }
+
+variable "public_api_key_path" {
+  type = string
+}
+
+variable "private_api_key_content" {
+  type = string
+}

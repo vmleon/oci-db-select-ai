@@ -26,6 +26,18 @@ variable "subnet_id" {
   type = string
 }
 
+variable "user_ocid" {
+  type = string
+}
+
+variable "fingerprint" {
+  type = string
+}
+
+variable "private_api_key_content" {
+  type = string
+  sensitive = true
+}
 
 variable "ads" {
   type = list(any)
@@ -57,5 +69,17 @@ variable "ssh_public_key" {
 }
 
 variable "ansible_ops_artifact_par_full_path" {
+  type = string
+}
+
+variable "oci_genai_runtime_name" {
+  type = string
+}
+
+variable "oci_genai_model_name" {
+  type = string
+}
+
+variable "oci_genai_compartment_id" {
   type = string
 }

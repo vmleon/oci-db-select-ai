@@ -10,7 +10,11 @@ import {
   searchCompartmentIdByName,
   getEFlexShapes,
 } from "./lib/oci.mjs";
-import { createSelfSignedCert, createSSHKeyPair } from "./lib/crypto.mjs";
+import {
+  createRSAKeyPair,
+  createSelfSignedCert,
+  createSSHKeyPair,
+} from "./lib/crypto.mjs";
 
 $.verbose = false;
 
@@ -38,6 +42,7 @@ const compartmentId = config.get("compartmentId");
 await selectComputeShape();
 
 await createSSHKeys(projectName);
+await createAPIKeys(`${projectName}_api`);
 await createCerts();
 
 // TODO download dataset if needed
@@ -146,6 +151,21 @@ async function createSSHKeys(name) {
   config.set("publicKeyContent", publicKeyContent);
   config.set("publicKeyPath", `${sshPathParam}.pub`);
   console.log(`SSH key pair created: ${chalk.green(sshPathParam)}`);
+}
+
+async function createAPIKeys() {
+  const apiKeyPathParam = path.join(__dirname, "..", ".api");
+  const { privateKeyPath, publicKeyPath } = await createRSAKeyPair(
+    apiKeyPathParam
+  );
+
+  const publicKeyContent = fs.readFileSync(publicKeyPath, "utf8");
+  const privateKeyContent = fs.readFileSync(privateKeyPath, "utf8");
+  config.set("privateAPIKeyPath", privateKeyPath);
+  config.set("privateAPIKeyContent", privateKeyContent.replaceAll("\n", " "));
+  config.set("publicAPIKeyContent", publicKeyContent.replaceAll("\n", " "));
+  config.set("publicAPIKeyPath", publicKeyPath);
+  console.log(`API Signing key pair created: ${chalk.green(apiKeyPathParam)}`);
 }
 
 async function createCerts() {
