@@ -9,7 +9,7 @@ This project show you how to work with [Oracle Database Select AI](https://www.o
 > - People that needs to consume the data don't necessarily know coding in SQL or the database structure.
 > - The people that knows SQL and the schema don't want to make changes every second day to adapt for the needs of the first group of people.
 > - Select AI bridges the gap making everybody happy.
-> - It affects any industry and can be deployed virtually in any case regardless of your Oracle Database deployment choice.
+> - It benefits any industry and can be deployed virtually in any case regardless of your Oracle Database deployment choice.
 
 You will have a fully functional deployment to battle-tested your knowledge with hands-on experience, and make adjustments on the code to fit your needs.
 
@@ -106,7 +106,15 @@ zx scripts/tfvars.mjs
 
 Run the commands that `tfvars.mjs` output in yellow one by one.
 
-Come back to the root folder:
+> Alternative: One liner for the yellow commands (for easy copy paste)
+>
+> ```bash
+> cd deploy/tf/app && terraform init && terraform apply -auto-approve
+> ```
+
+This process will take a few minutes.
+
+After the resource creation is done, come back to the root folder:
 
 ```bash
 cd ../../..
@@ -121,12 +129,6 @@ zx scripts/bastion-session.mjs
 ```
 
 Paste the yellow command to connect with SSH into the compute instance.
-
-> Terraform deployment yellow instructions in one line
->
-> ```bash
-> cd deploy/tf/app && terraform init && terraform apply -auto-approve
-> ```
 
 To connect, answer `yes` to add the fingerprint to the know hosts.
 
@@ -170,10 +172,10 @@ sql -name admin -s @/home/opc/queries/nql_count_customers_resource_principal.sql
 > exit;
 > ```
 >
-> Run another natural query language to list the customers that buying shoes, the result will be SQL code that can be executed.
+> Run another natural query language to list the top 10 customers that buying hardware, the result will be SQL code that can be executed.
 
 ```bash
-sql -name admin -s @/home/opc/queries/nql_customers_buying_shoes_resource_principal.sql
+sql -name admin -s @/home/opc/queries/nql_customers_buying_hardware_resource_principal.sql
 ```
 
 ## Clean up

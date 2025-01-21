@@ -1,14 +1,19 @@
 ###
 
-POST http://localhost:8080/api/search?q=List the xxx with creation date before Sep 2022
-
-###
-
-POST http://localhost:8080/api/search?q=List the xxx with creation date before Sep 2022
+POST http://localhost:8080/api/selectai
 Content-Type: application/json
 
 {
-    "n": 2
+    "query": "what is the total number of customers"
+}
+
+###
+
+POST http://localhost:8080/api/selectai
+Content-Type: application/json
+
+{
+    "query": "show the top 10 customers who are buying Hardware"
 }
 
 ###
