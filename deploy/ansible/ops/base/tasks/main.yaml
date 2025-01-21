@@ -61,17 +61,24 @@
     owner: opc
     group: opc
     mode: '0744'
-- name: Copy init/create_credentials.sql.sql template
+- name: Copy init/create_credentials_user_api_key.sql template
   ansible.builtin.template:
-    src: ../files/init/create_credentials.sql.j2
-    dest: /home/opc/init/create_credentials.sql
+    src: ../files/init/create_credentials_user_api_key.sql.j2
+    dest: /home/opc/init/create_credentials_user_api_key.sql
     owner: opc
     group: opc
     mode: '0640'
-- name: Copy init/create_profile.sql.sql template
+- name: Copy init/create_profile_user_api_key.sql template
   ansible.builtin.template:
-    src: ../files/init/create_profile.sql.j2
-    dest: /home/opc/init/create_profile.sql
+    src: ../files/init/create_profile_user_api_key.sql.j2
+    dest: /home/opc/init/create_profile_user_api_key.sql
+    owner: opc
+    group: opc
+    mode: '0640'
+- name: Copy init/create_profile_resource_principal.sql template
+  ansible.builtin.template:
+    src: ../files/init/create_profile_resource_principal.sql.j2
+    dest: /home/opc/init/create_profile_resource_principal.sql
     owner: opc
     group: opc
     mode: '0640'
@@ -103,30 +110,26 @@
 - name: Create ADMIN connection
   ansible.builtin.command: "sql /nolog @/home/opc/conn/admin.sql"
   become_user: opc
-- name: Run banner
-  ansible.builtin.command: "sql -name admin @/home/opc/queries/banner.sql"
-  become_user: opc
-  register: banner_result
-- debug: msg="{{ banner_result.stdout_lines }}"
-- name: Run sysdate
-  ansible.builtin.command: "sql -name admin @/home/opc/queries/sysdate.sql"
-  become_user: opc
-  register: sysdate_result
-- debug: msg="{{ sysdate_result.stdout_lines }}"
-- name: Grant Permissions
-  ansible.builtin.command: "sql -name admin @/home/opc/init/grant_permissions.sql"
-  become_user: opc
+# - name: Grant Permissions
+#   ansible.builtin.command: "sql -name admin -s @/home/opc/init/grant_permissions.sql"
+#   become_user: opc
 # - name: Add Network ACL
-#   ansible.builtin.command: "sql -name admin @/home/opc/init/network_acl.sql"
+#   ansible.builtin.command: "sql -name admin -s @/home/opc/init/network_acl.sql"
 #   become_user: opc
 - name: Add Credentials
-  ansible.builtin.command: "sql -name admin @/home/opc/init/create_credentials.sql"
+  ansible.builtin.command: "sql -name admin -s @/home/opc/init/create_credentials_user_api_key.sql"
   become_user: opc
-- name: List credentials
-  ansible.builtin.command: "sql -name admin @/home/opc/queries/list_credentials.sql"
+# - name: List credentials
+#   ansible.builtin.command: "sql -name admin -s @/home/opc/queries/list_credentials.sql"
+#   become_user: opc
+#   register: list_credentials_results
+# - debug: msg="{{ list_credentials_results.stdout_lines }}"
+- name: Enable Resource Principal
+  ansible.builtin.command: "sql -name admin -s @/home/opc/init/enable_resource_principal.sql"
   become_user: opc
-  register: list_credentials_results
-- debug: msg="{{ list_credentials_results.stdout_lines }}"
 - name: Create profile
-  ansible.builtin.command: "sql -name admin @/home/opc/init/create_profile.sql"
+  ansible.builtin.command: "sql -name admin -s @/home/opc/init/create_profile_user_api_key.sql"
+  become_user: opc
+- name: Create profile resource principal
+  ansible.builtin.command: "sql -name admin -s @/home/opc/init/create_profile_resource_principal.sql"
   become_user: opc

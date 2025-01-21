@@ -1,3 +1,7 @@
+output "id" {
+  value = oci_database_autonomous_database.adb.id
+}
+
 output "admin_password" {
   value = random_password.admin_password.result
 }
