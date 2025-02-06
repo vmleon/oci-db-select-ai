@@ -88,6 +88,30 @@ cd src/backend
 cd ../..
 ```
 
+> To run the Java App locally
+>
+> Create a `application-local.yaml`
+>
+> And execute your Spring Boot Application with:
+>
+> ```
+> -Dspring.profiles.active=local
+> ```
+
+Build Frontend
+
+```bash
+cd src/web
+```
+
+```bash
+npm run build
+```
+
+```bash
+cd ../..
+```
+
 ## Setup environment
 
 Answer all the questions from `setenv.mjs` script:
@@ -114,7 +138,37 @@ Run the commands that `tfvars.mjs` output in yellow one by one.
 
 This process will take a few minutes.
 
-After the resource creation is done, come back to the root folder:
+Extract the Load Balancer URL for using the service
+
+```bash
+echo "https://$(terraform output -raw lb_ip)"
+```
+
+Go to the browser and go to the URL address from the previous command.
+
+We are using a self signed certificate. Not the like of your browser. Not adviced for production. For now, you will get this message, to proceed, go with `Advanced` and `Proceed to XX.XX.XX.XX (unsafe)`:
+
+![Your Connection is not private](./images/your_connection_is_not_private.png)
+
+> Example of queries:
+>
+> ```
+> how many customers do we have?
+> ```
+>
+> ```
+> top 10 best selling products by category
+> ```
+>
+> ```
+> show the top 10 customers who are buying Hardware
+> ```
+>
+> ```
+> show the top 10 customers with all the details who are buying Hardware
+> ```
+
+After the resource creation is done, come back to the root folder for any other operation:
 
 ```bash
 cd ../../..
@@ -138,6 +192,12 @@ To connect, answer `yes` to add the fingerprint to the know hosts.
 >
 > ```bash
 > ssh -i /home/opc/private.key opc@$(jq -r .backend_private_ip ansible_params.json)
+> ```
+>
+> You can also connect to the `web` machine with this command
+>
+> ```bash
+> ssh -i /home/opc/private.key opc@$(jq -r .web_private_ip ansible_params.json)
 > ```
 
 ## Run Select AI queries

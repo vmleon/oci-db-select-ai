@@ -1,0 +1,1 @@
+COMMENT ON TABLE SH.CUSTOMERS.CUST_ID IS 'Customer identification';

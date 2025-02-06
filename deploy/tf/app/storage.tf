@@ -83,3 +83,36 @@ resource "oci_objectstorage_preauthrequest" "db_wallet_artifact_par" {
   object_name  = oci_objectstorage_object.db_wallet_artifact_object.object
   time_expires = timeadd(timestamp(), "${var.artifacts_par_expiration_in_days * 24}h")
 }
+
+
+resource "oci_objectstorage_object" "ansible_web_artifact_object" {
+  bucket    = oci_objectstorage_bucket.artifacts_bucket.name
+  source    = data.archive_file.ansible_web_artifact.output_path
+  namespace = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
+  object    = "ansible_web_artifact.zip"
+}
+
+resource "oci_objectstorage_preauthrequest" "ansible_web_artifact_par" {
+  namespace    = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
+  bucket       = oci_objectstorage_bucket.artifacts_bucket.name
+  name         = "ansible_web_artifact_par"
+  access_type  = "ObjectRead"
+  object_name  = oci_objectstorage_object.ansible_web_artifact_object.object
+  time_expires = timeadd(timestamp(), "${var.artifacts_par_expiration_in_days * 24}h")
+}
+
+resource "oci_objectstorage_object" "web_artifact_object" {
+  bucket    = oci_objectstorage_bucket.artifacts_bucket.name
+  source    = data.archive_file.web_artifact.output_path
+  namespace = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
+  object    = "web_artifact.zip"
+}
+
+resource "oci_objectstorage_preauthrequest" "web_artifact_par" {
+  namespace    = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
+  bucket       = oci_objectstorage_bucket.artifacts_bucket.name
+  name         = "web_artifact_par"
+  access_type  = "ObjectRead"
+  object_name  = oci_objectstorage_object.web_artifact_object.object
+  time_expires = timeadd(timestamp(), "${var.artifacts_par_expiration_in_days * 24}h")
+}

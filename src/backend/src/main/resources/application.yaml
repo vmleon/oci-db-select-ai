@@ -1,1 +1,43 @@
-spring.application.name=backend
+spring:
+  application:
+    name: backend
+  profiles:
+    active: default
+  main:
+    banner-mode: "off"
+  datasource:
+    url: jdbc:oracle:thin:@SERVICE_NAME_high?TNS_ADMIN=/PATH/TO/WALLET
+    username: ADMIN
+    password: "PASSWORD"
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      sql-for-validate-connection: SELECT * FROM dual
+      connection-pool-name: connectionPoolName1
+      initial-pool-size: 5
+      min-pool-size: 5
+      max-pool-size: 10
+    jpa:
+      database-platform: org.hibernate.dialect.OracleDialect
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+      hibernate:
+        use-new-id-generator-mappings: false
+        ddl-auto: none
+    oracle:
+      jdbc:
+        fanEnabled: false
+selectai:
+  profile: GENAI_CRED_RESOURCE_PRINCIPAL
+logging:
+  level:
+    org:
+      hibernate:
+        sql: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

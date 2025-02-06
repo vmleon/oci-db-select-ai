@@ -27,10 +27,31 @@ module "backend" {
   instance_shape = var.instance_shape
   ssh_public_key = var.ssh_public_key
   ads            = data.oci_identity_availability_domains.ads.availability_domains
+  
+  db_admin_password = module.adbs.admin_password
 
   ansible_backend_artifact_par_full_path = oci_objectstorage_preauthrequest.ansible_backend_artifact_par.full_path
   backend_jar_par_full_path              = oci_objectstorage_preauthrequest.backend_jar_artifact_par.full_path 
-  db_admin_password = module.adbs.admin_password
+  wallet_par_full_path                   = oci_objectstorage_preauthrequest.db_wallet_artifact_par.full_path
+}
+
+module "web" {
+  source = "../modules/web"
+
+  project_name        = local.project_name
+  deploy_id           = local.deploy_id
+  config_file_profile = var.config_file_profile
+  region              = var.region
+  tenancy_ocid        = var.tenancy_ocid
+  compartment_ocid    = var.compartment_ocid
+
+  subnet_id      = oci_core_subnet.app_subnet.id
+  instance_shape = var.instance_shape
+  ssh_public_key = var.ssh_public_key
+  ads            = data.oci_identity_availability_domains.ads.availability_domains
+
+  ansible_web_artifact_par_full_path   = oci_objectstorage_preauthrequest.ansible_web_artifact_par.full_path
+  web_artifact_par_full_path           = oci_objectstorage_preauthrequest.web_artifact_par.full_path
 }
 
 module "ops" {
@@ -54,6 +75,7 @@ module "ops" {
   subnet_id            = oci_core_subnet.app_subnet.id
   instance_shape       = var.instance_shape
   backend_private_ip   = module.backend.private_ip
+  web_private_ip       = module.web.private_ip
   ssh_private_key_path = var.ssh_private_key_path
   ssh_public_key       = var.ssh_public_key
   ads                  = data.oci_identity_availability_domains.ads.availability_domains

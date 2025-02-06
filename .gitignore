@@ -38,6 +38,15 @@ dist
 dist-ssr
 *.local
 
+# next.js
+/.next/
+/out/
+src/web/build
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'dev.victormartin.oracle.selectai'
-version = '0.0.1'
+version = '1.0.0'
 
 java {
 	toolchain {
@@ -18,8 +18,11 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.oracle.database.jdbc:ojdbc17-production:23.6.0.24.10'
+	implementation 'com.oracle.database.jdbc:ucp:23.6.0.24.10'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

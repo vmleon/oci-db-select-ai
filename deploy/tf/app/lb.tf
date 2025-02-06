@@ -33,17 +33,17 @@ resource "oci_load_balancer" "lb" {
   }
 }
 
-# resource "oci_load_balancer_backend_set" "lb-backend-set-web" {
-#   name             = "lb-backend-set-web"
-#   load_balancer_id = oci_load_balancer.lb.id
-#   policy           = "ROUND_ROBIN"
+resource "oci_load_balancer_backend_set" "lb-backend-set-web" {
+  name             = "lb-backend-set-web"
+  load_balancer_id = oci_load_balancer.lb.id
+  policy           = "ROUND_ROBIN"
 
-#   health_checker {
-#     port     = "80"
-#     protocol = "HTTP"
-#     url_path = "/"
-#   }
-# }
+  health_checker {
+    port     = "80"
+    protocol = "HTTP"
+    url_path = "/"
+  }
+}
 
 resource "oci_load_balancer_backend_set" "lb-backend-set-server" {
   name             = "lb-backend-set-server"
@@ -113,16 +113,16 @@ resource "oci_load_balancer_rule_set" "rule_set_to_ssl" {
   }
 }
 
-# resource "oci_load_balancer_backend" "lb-backend-web" {
-#   load_balancer_id = oci_load_balancer.lb.id
-#   backendset_name  = oci_load_balancer_backend_set.lb-backend-set-web.name
-#   ip_address       = module.web.private_ip
-#   port             = 80
-#   backup           = false
-#   drain            = false
-#   offline          = false
-#   weight           = 1
-# }
+resource "oci_load_balancer_backend" "lb-backend-web" {
+  load_balancer_id = oci_load_balancer.lb.id
+  backendset_name  = oci_load_balancer_backend_set.lb-backend-set-web.name
+  ip_address       = module.web.private_ip
+  port             = 80
+  backup           = false
+  drain            = false
+  offline          = false
+  weight           = 1
+}
 
 resource "oci_load_balancer_backend" "lb-backend-server" {
   load_balancer_id = oci_load_balancer.lb.id
@@ -149,23 +149,23 @@ resource "oci_load_balancer_load_balancer_routing_policy" "routing_policy" {
     }
   }
 
-  # rules {
-  #   name      = "routing_to_frontend_assets"
-  #   condition = "any(http.request.url.path sw (i '/assets'))"
-  #   actions {
-  #     name             = "FORWARD_TO_BACKENDSET"
-  #     backend_set_name = oci_load_balancer_backend_set.lb-backend-set-web.name
-  #   }
-  # }
+  rules {
+    name      = "routing_to_frontend_assets"
+    condition = "any(http.request.url.path sw (i '/assets'))"
+    actions {
+      name             = "FORWARD_TO_BACKENDSET"
+      backend_set_name = oci_load_balancer_backend_set.lb-backend-set-web.name
+    }
+  }
 
-  # rules {
-  #   name      = "routing_to_frontend"
-  #   condition = "any(http.request.url.path eq (i '/'))"
-  #   actions {
-  #     name             = "FORWARD_TO_BACKENDSET"
-  #     backend_set_name = oci_load_balancer_backend_set.lb-backend-set-web.name
-  #   }
-  # }
+  rules {
+    name      = "routing_to_frontend"
+    condition = "any(http.request.url.path eq (i '/'))"
+    actions {
+      name             = "FORWARD_TO_BACKENDSET"
+      backend_set_name = oci_load_balancer_backend_set.lb-backend-set-web.name
+    }
+  }
 }
 
 resource "oci_load_balancer_certificate" "certificate" {

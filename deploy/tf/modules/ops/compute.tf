@@ -9,6 +9,7 @@ locals {
     private_api_key_content  = var.private_api_key_content
     
     backend_private_ip   = var.backend_private_ip
+    web_private_ip       = var.web_private_ip
     private_key_content  = file(var.ssh_private_key_path)
     
     db_service_name            = "${var.project_name}${var.deploy_id}"

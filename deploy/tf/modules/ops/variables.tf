@@ -56,6 +56,10 @@ variable "backend_private_ip" {
   type      = string
 }
 
+variable "web_private_ip" {
+  type      = string
+}
+
 variable "instance_shape" {
   type = string
 }

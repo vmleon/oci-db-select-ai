@@ -38,21 +38,10 @@ variable "ssh_public_key" {
   type = string
 }
 
-variable "ansible_backend_artifact_par_full_path" {
+variable "ansible_web_artifact_par_full_path" {
   type = string
 }
 
-
-variable "backend_jar_par_full_path" {
-  type = string
-}
-
-
-variable "db_admin_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "wallet_par_full_path" {
+variable "web_artifact_par_full_path" {
   type = string
 }
