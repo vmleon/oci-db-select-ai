@@ -1,5 +1,3 @@
--- TODO change it to OCI Gen AI
-
 begin
    dbms_network_acl_admin.append_host_ace(
       host => 'oraclecloud.com',

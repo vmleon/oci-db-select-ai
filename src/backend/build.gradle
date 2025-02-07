@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'com.oracle.database.jdbc:ojdbc17-production:23.6.0.24.10'
 	implementation 'com.oracle.database.jdbc:ucp:23.6.0.24.10'
+	implementation 'org.apache.commons:commons-lang3:3.17.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

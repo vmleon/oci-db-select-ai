@@ -23,7 +23,7 @@ export default function SQLCode({ children, isLoading }: Props) {
 
     return <div className='flex-1'>
         <pre className='text-sm sm:text-base inline-flex text-left items-center space-x-4 bg-gray-800 text-white rounded-lg p-4 pl-6'>
-            {format(children, { language: 'plsql' })}
+            {format(children, { language: 'plsql', tabWidth: 2, keywordCase: "upper", expressionWidth: 30 })}
         </pre>
     </div>;
 }

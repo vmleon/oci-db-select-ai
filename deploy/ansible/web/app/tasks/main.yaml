@@ -16,10 +16,7 @@
   ansible.builtin.command: unzip -o /home/opc/web.zip -d /usr/share/nginx/html/
   become: true
   notify: restart nginx
-- name: Add firewall ports
-  firewalld:
-    zone: public
-    service: http
-    permanent: yes
-    immediate: yes
-    state: enabled
+- name: Stop firewalld
+  ansible.builtin.command: systemctl stop firewalld
+- name: Disable firewalld
+  ansible.builtin.command: systemctl disable firewalld

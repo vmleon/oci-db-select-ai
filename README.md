@@ -105,6 +105,10 @@ cd src/web
 ```
 
 ```bash
+npm install
+```
+
+```bash
 npm run build
 ```
 
@@ -149,24 +153,6 @@ Go to the browser and go to the URL address from the previous command.
 We are using a self signed certificate. Not the like of your browser. Not adviced for production. For now, you will get this message, to proceed, go with `Advanced` and `Proceed to XX.XX.XX.XX (unsafe)`:
 
 ![Your Connection is not private](./images/your_connection_is_not_private.png)
-
-> Example of queries:
->
-> ```
-> how many customers do we have?
-> ```
->
-> ```
-> top 10 best selling products by category
-> ```
->
-> ```
-> show the top 10 customers who are buying Hardware
-> ```
->
-> ```
-> show the top 10 customers with all the details who are buying Hardware
-> ```
 
 After the resource creation is done, come back to the root folder for any other operation:
 

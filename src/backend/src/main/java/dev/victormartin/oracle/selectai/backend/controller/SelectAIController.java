@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,10 +50,22 @@ public class SelectAIController {
         prompt=prompt.replaceAll("[;?!\"\']", " ");
 
         String selectAiShowsql = String.format("SELECT AI showsql %s", prompt);
+        StopWatch stopWatchShowSql = new StopWatch();
+        stopWatchShowSql.start();
         String sqlCode = jdbcTemplate.queryForObject(selectAiShowsql, String.class);
+        stopWatchShowSql.stop();
+
+        String selectAiNarrate = String.format("SELECT AI narrate %s", prompt);
+        StopWatch stopWatchNarrate = new StopWatch();
+        stopWatchNarrate.start();
+        String narration = jdbcTemplate.queryForObject(selectAiNarrate, String.class);
+        stopWatchNarrate.stop();
 
         // execute query on database
+        StopWatch stopWatchExecuteQuery = new StopWatch();
+        stopWatchExecuteQuery.start();
         List<Map<String, Object>> sqlQueryResultString = jdbcTemplate.queryForList(sqlCode);
+        stopWatchExecuteQuery.stop();
         List<Map<String, String>> result = sqlQueryResultString.stream()
                 .map(row -> row.entrySet().stream()
                         .collect(Collectors.toMap(
@@ -61,8 +74,14 @@ public class SelectAIController {
                         )))
                 .collect(Collectors.toList());
 
-        SelectAiQueryResponse response = new SelectAiQueryResponse(prompt, sqlCode,
-                result);
+        SelectAiQueryResponse response = new SelectAiQueryResponse(
+                prompt,
+                sqlCode,
+                stopWatchShowSql.getTotalTimeMillis(),
+                narration,
+                stopWatchNarrate.getTotalTimeMillis(),
+                result,
+                stopWatchExecuteQuery.getTotalTimeMillis());
         return response;
     }
 }
