@@ -66,10 +66,21 @@ function SelectAiView() {
 
     return (
         <div className="flex flex-col gap-4">
-            <div className='flex-1 flex gap-10'>
+            <div className='flex-1 flex py-6 px-2 gap-10'>
                 <div className='flex-none flex flex-col py-10 justify-start gap-3'>
+                    <div className='flex flex-col gap-3'>
+                        <Label htmlFor="prompt">What do you want to know about your business?</Label>
+                        <Textarea
+                            id="prompt"
+                            name="prompt"
+                            required
+                            placeholder='Business Prompt'
+                            value={promptValue}
+                            onChange={promptOnChange}></Textarea>
+                        <Button disabled={!promptValue.length} onClick={sendOnClick}>Get Answer</Button>
+                    </div>
                     <div className="flex flex-col gap-3 py-10">
-                        <Label htmlFor="prompt">Examples of prompts</Label>
+                        <Label htmlFor="prompt">Prompt examples</Label>
                         <Select defaultValue="" onValueChange={(value) => { setPromptValue(value ? value : "") }}>
                             <SelectTrigger className="w-[280px] text-foreground">
                                 <SelectValue placeholder="Examples" />
@@ -83,19 +94,8 @@ function SelectAiView() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className='flex flex-col gap-3'>
-                        <Label htmlFor="prompt">What do you want to know about your business?</Label>
-                        <Textarea
-                            id="prompt"
-                            name="prompt"
-                            required
-                            placeholder='Business Prompt'
-                            value={promptValue}
-                            onChange={promptOnChange}></Textarea>
-                        <Button disabled={!promptValue.length} onClick={sendOnClick}>Get Answer</Button>
-                    </div>
                 </div>
-                <div className='flex-2 py-6'>
+                <div className='flex-2 py-6 px-2'>
                     <TechResultsTitle
                         narrationTimeInMillis={data?.narrationTimeInMillis || 0}
                         resultTimeInMillis={data?.resultTimeInMillis || 0}
@@ -104,8 +104,8 @@ function SelectAiView() {
                 </div>
             </div>
             <Separator />
-            <div className="flex flex-col gap-4">
-                <Label className='text-xl'>Business Results</Label>
+            <div className="flex flex-col gap-4  py-4 px-2 border-2">
+                <Label className='text-2xl'>Business Results</Label>
                 <Narration isLoading={isLoading}>{data?.narration}</Narration>
                 <div className='h-full'>
                     <ResultTable isLoading={isLoading}>{data?.result}</ResultTable>
