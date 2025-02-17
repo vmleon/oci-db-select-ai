@@ -33,6 +33,8 @@ Select AI requires credentials for the different target LLMs models, and a profi
 
 There is a JAVA backend (in development) and a website (in development) to have a high level abstract of the use case to make it easy to demo to non-technical people.
 
+![Architecture](./images/architecture-select-ai.drawio.png)
+
 ## Documentation
 
 - [Select AI Use Cases](https://docs.public.content.oci.oraclecloud.com/en-us/iaas/autonomous-database-serverless/doc/select-ai-use-cases.html)
